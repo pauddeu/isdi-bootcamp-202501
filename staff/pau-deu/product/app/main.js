@@ -12,6 +12,10 @@ landing.mount = function () {
     logo.textContent = 'Logo'
     this.container.appendChild(logo)
 
+var logo = document.createElement('h1')
+    logo.textContent = 'Welcome!'
+    this.container.appendChild(logo)
+    
     var registerAnchor = document.createElement('a')
     registerAnchor.textContent = 'Register'
     registerAnchor.addEventListener('click', function () {
@@ -20,9 +24,9 @@ landing.mount = function () {
     }.bind(this))
     this.container.appendChild(registerAnchor)
 
-    var orText = document.createTextNode('or')
+    var orText = document.createTextNode(' or ')
     this.container.appendChild(orText)
-    
+
     var loginAnchor = document.createElement('a')
     loginAnchor.textContent = 'Login'
     loginAnchor.addEventListener('click', function () {
