@@ -7,7 +7,7 @@ function Landing() {
     registerAnchor.setText('Register')
     this.registerAnchor = registerAnchor
     this.add(registerAnchor)
-    var orText = document.createTextNode('or')
+    var orText = document.createTextNode(' or ')
     this.container.appendChild(orText)
     var loginAnchor = new Anchor()
     loginAnchor.setText('Login')
