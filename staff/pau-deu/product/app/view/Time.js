@@ -1,6 +1,6 @@
-class Label extends Component {
+class Time extends Component {
     constructor() {
-        super('label')
+        super('time')
     }
     setText(text) {
         this.container.textContent = text

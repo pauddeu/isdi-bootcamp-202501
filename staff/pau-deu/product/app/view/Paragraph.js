@@ -1,6 +1,6 @@
-class Label extends Component {
+class Paragraph extends Component {
     constructor() {
-        super('label')
+        super('p')
     }
     setText(text) {
         this.container.textContent = text

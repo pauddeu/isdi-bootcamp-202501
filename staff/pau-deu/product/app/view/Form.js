@@ -1,11 +1,11 @@
-function Form() {
-    Component.call(this, 'form')
-}
-Form.prototype = Object.create(Component.prototype)
-Form.prototype.constructor = Form
-Form.prototype.addSubmitListener = function (listener) {
-    this.container.addEventListener('submit', listener)
-}
-Form.prototype.clear = function () {
-    this.container.reset()
+class Form extends Component {
+    constructor() {
+        super('form')
+    }
+    addSubmitListener(listener) {
+        this.container.addEventListener('submit', listener)
+    }
+    clear() {
+        this.container.reset()
+    }
 }
