@@ -3,6 +3,7 @@ class DuplicityError extends Error {
         super(message)
     }
 }
+
 class CredentialsError extends Error {
     constructor(message) {
         super(message)
