@@ -22,19 +22,25 @@ function Login({ onRegisterClick, onLoginSubmit }) {
         }
     }
 
+    const handleLogoClick = () => {
+        window.location.reload();
+    }
+
     console.debug('Login -> render')
 
-    return <div>
-        <h1>Logo</h1>
-        <form onSubmit={handleLoginSubmit}>
-            <label htmlFor="username">Username</label>
-            <input type="text" id="username" />
+    return (
+        <div>
+            <h1 onClick={handleLogoClick}>Logo</h1>
+            <form onSubmit={handleLoginSubmit}>
+                <label htmlFor="username">Username</label>
+                <input type="text" id="username" />
 
-            <label htmlFor="password">Password</label>
-            <input type="password" id="password" />
+                <label htmlFor="password">Password</label>
+                <input type="password" id="password" />
 
-            <button type="submit">Login</button>
-        </form>
-        <a onClick={onRegisterClick}>Register</a>
-    </div>
+                <button type="submit">Login</button>
+            </form>
+            <a onClick={onRegisterClick}>Register</a>
+        </div>
+    )
 }
