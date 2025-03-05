@@ -24,33 +24,35 @@ function Register({ onLoginClick, onRegisterSubmit }) {
         }
     }
 
-    const handleLogoClick = () => {
-        window.location.reload();
-    }
-
     console.debug('Register -> render')
 
-    return (
-        <div>
-            <h1 onClick={handleLogoClick}>Logo</h1>
+    return <div>
+        <h1>Logo</h1>
 
-            <form onSubmit={handleRegisterSubmit}>
+        <form onSubmit={handleRegisterSubmit}>
+            <div className="field">
                 <label htmlFor="name">Name</label>
-                <input type="text" id="name" />
+                <input type="text" id="name" placeholder="name" />
+            </div>
 
+            <div className="field">
                 <label htmlFor="email">E-mail</label>
                 <input type="email" id="email" />
+            </div>
 
+            <div className="field">
                 <label htmlFor="username">Username</label>
                 <input type="text" id="username" />
+            </div>
 
+            <div className="field">
                 <label htmlFor="password">Password</label>
                 <input type="password" id="password" />
+            </div>
 
-                <button type="submit">Register</button>
-            </form>
+            <button type="submit">Register</button>
+        </form>
 
-            <a onClick={onLoginClick}>Login</a>
-        </div>
-    )
+        <a onClick={onLoginClick}>Login</a>
+    </div>
 }

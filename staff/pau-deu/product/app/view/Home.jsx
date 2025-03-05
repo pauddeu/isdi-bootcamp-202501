@@ -32,25 +32,36 @@ function Home({ onLogoutClick }) {
             alert(error.message)
         }
     }
+
     const handleAddPostClick = () => setView('create-post')
+
     const handleCreatePostSubmit = event => {
         event.preventDefault()
+
         try {
             const { target: form } = event
+
             const { image: { value: image }, text: { value: text } } = form
+
             logic.createPost(image, text)
+
             const posts = logic.getPosts()
+
             setPosts(posts)
             setView('posts')
         } catch (error) {
             console.error(error)
+
             alert(error.message)
         }
     }
+
     const handleToggleLikePostClick = postId => {
         try {
             logic.toggleLikePost(postId)
+
             const posts = logic.getPosts()
+
             setPosts(posts)
         } catch (error) {
             console.error(error)
@@ -62,34 +73,49 @@ function Home({ onLogoutClick }) {
     console.debug('Home -> render')
 
     return <div>
-        <h1>Logo</h1>
+        <header>
+            <h1>Logo</h1>
 
-        <h2>Hello, {userName}!</h2>
+            <h2>Hello, {userName}!</h2>
 
-        <button type="button" onClick={handleLogoutClick}>Logout</button>
+            <button type="button" onClick={handleLogoutClick}>Logout</button>
+        </header>
 
-        {view === 'posts' && <section>
-            {posts.map(post =>
-                <article>
-                    <h3>{post.author}</h3>
-                    <img src={post.image} />
-                    <p>{post.text}</p>
-                    <time>{post.createdAt.toISOString()}</time>
-                    <button onClick={() => handleToggleLikePostClick(post.id)}>{`${post.liked ? '♥️' : '🤍'} (${post.likesCount})`}</button>
-                </article>)}
-        </section>}
+        <main>
+            {view === 'posts' && <section>
+                {posts.map(post =>
+                    <article>
+                        <h3>{post.author}</h3>
 
-        {view === 'create-post' && <section>
-            <form onSubmit={handleCreatePostSubmit}>
-                <label htmlFor="image">Image</label>
-                <input type="url" id="image" />
-                <label htmlFor="text">Text</label>
-                <input type="text" id="text" />
+                        <img src={post.image} />
 
-                <button type="submit">Create</button>
-            </form>
+                        <p>{post.text}</p>
 
-            <a>Cancel</a>
-        </section>}
-        </div>
+                        <div className="post-footer">
+                            <time>{post.createdAt.toISOString()}</time>
+
+                            <button onClick={() => handleToggleLikePostClick(post.id)}>{`${post.liked ? '♥️' : '🤍'} (${post.likesCount})`}</button>
+                        </div>
+                    </article>)}
+            </section>}
+
+            {view === 'create-post' && <section>
+                <form onSubmit={handleCreatePostSubmit}>
+                    <label htmlFor="image">Image</label>
+                    <input type="url" id="image" />
+
+                    <label htmlFor="text">Text</label>
+                    <input type="text" id="text" />
+
+                    <button type="submit">Create</button>
+                </form>
+
+                <a>Cancel</a>
+            </section>}
+        </main>
+
+        <footer>
+            {view === 'posts' && <button onClick={handleAddPostClick}>+</button>}
+        </footer>
+    </div>
 }

@@ -1,5 +1,19 @@
+const { useState, useEffect } = React
+
 function App() {
     const [view, setView] = useState('landing')
+
+    useEffect(() => {
+        try {
+            const loggedIn = logic.isUserLoggedIn()
+
+            loggedIn && setView('home')
+        } catch (error) {
+            console.error(error)
+
+            alert(error.messsage)
+        }
+    }, [])
 
     const handleRegisterClick = () => setView('register')
 
@@ -13,7 +27,7 @@ function App() {
 
     console.debug('App -> render')
 
-    return <>
+    return 
         {view === 'landing' && <Landing onRegisterClick={handleRegisterClick} onLoginClick={handleLoginClick} />}
 
         {view === 'register' && <Register onLoginClick={handleLoginClick} onRegisterSubmit={handleRegisterSubmit} />}
@@ -21,5 +35,4 @@ function App() {
         {view === 'login' && <Login onRegisterClick={handleRegisterClick} onLoginSubmit={handleLoginSubmit} />}
 
         {view === 'home' && <Home onLogoutClick={handleLogoutClick} />}
-    </>
 }
