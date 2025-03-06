@@ -1,4 +1,12 @@
+// import { useState, useEffect } from 'react'
 const { useState, useEffect } = React
+
+import Landing from './view/Landing.jsx'
+import Register from './view/Register.jsx'
+import Login from './view/Login.jsx'
+import Home from './view/Home.jsx'
+
+import logic from './logic.js'
 
 function App() {
     const [view, setView] = useState('landing')
@@ -27,7 +35,7 @@ function App() {
 
     console.debug('App -> render')
 
-    return 
+    return <>
         {view === 'landing' && <Landing onRegisterClick={handleRegisterClick} onLoginClick={handleLoginClick} />}
 
         {view === 'register' && <Register onLoginClick={handleLoginClick} onRegisterSubmit={handleRegisterSubmit} />}
@@ -35,4 +43,7 @@ function App() {
         {view === 'login' && <Login onRegisterClick={handleRegisterClick} onLoginSubmit={handleLoginSubmit} />}
 
         {view === 'home' && <Home onLogoutClick={handleLogoutClick} />}
+    </>
 }
+
+export default App

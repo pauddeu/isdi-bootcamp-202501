@@ -1,3 +1,5 @@
+import logic from '../logic.js'
+
 function Register({ onLoginClick, onRegisterSubmit }) {
     const handleRegisterSubmit = event => {
         event.preventDefault()

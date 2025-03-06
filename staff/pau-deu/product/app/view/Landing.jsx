@@ -6,3 +6,5 @@ function Landing({ onRegisterClick, onLoginClick }) {
         <a onClick={onRegisterClick}>Register</a> or <a onClick={onLoginClick}>Login</a>
     </div>
 }
+
+export default Landing
