@@ -1,7 +1,7 @@
 import logic from '../../logic.js'
 
-function CreatePost({ onPostCreateSubmit }) {
-    const handleCreatePostSubmit = event => {
+function CreatePost({ onPostCreated, onPostCreateCancelled }) {
+    const handleFormSubmit = event => {
         event.preventDefault()
 
         try {
@@ -11,7 +11,7 @@ function CreatePost({ onPostCreateSubmit }) {
 
             logic.createPost(image, text)
 
-            onPostCreateSubmit()
+            onPostCreated()
         } catch (error) {
             console.error(error)
 
@@ -19,10 +19,12 @@ function CreatePost({ onPostCreateSubmit }) {
         }
     }
 
+    const handleCancelClick = () => onPostCreateCancelled()
+
     console.debug('CreatePost -> render')
 
     return <section>
-        <form onSubmit={handleCreatePostSubmit}>
+        <form onSubmit={handleFormSubmit}>
             <label htmlFor="image">Image</label>
             <input type="url" id="image" />
 
@@ -32,7 +34,7 @@ function CreatePost({ onPostCreateSubmit }) {
             <button type="submit">Create</button>
         </form>
 
-        <a>Cancel</a>
+        <a onClick={handleCancelClick}>Cancel</a>
     </section>
 }
 

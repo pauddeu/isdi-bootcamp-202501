@@ -6,14 +6,16 @@ import CreatePost from './components/CreatePost.jsx'
 
 import logic from '../logic.js'
 
-function Home({ onLogoutClick }) {
+function Home({ onUserLoggedOut }) {
     const [view, setView] = useState('posts')
     const [userName, setUserName] = useState('')
+
     useEffect(() => {
         console.debug('Home -> useEffect')
 
         try {
             const name = logic.getUserName()
+
             setUserName(name)
         } catch (error) {
             console.error(error)
@@ -26,7 +28,7 @@ function Home({ onLogoutClick }) {
         try {
             logic.logoutUser()
 
-            onLogoutClick()
+            onUserLoggedOut()
         } catch (error) {
             console.error(error)
 
@@ -35,7 +37,10 @@ function Home({ onLogoutClick }) {
     }
 
     const handleAddPostClick = () => setView('create-post')
-    const handlePostCreateSubmit = () => setView('posts')
+
+    const handlePostCreated = () => setView('posts')
+
+    const handlePostCreateCancelled = () => setView('posts')
 
     console.debug('Home -> render')
 
@@ -49,8 +54,9 @@ function Home({ onLogoutClick }) {
         </header>
 
         <main>
-        {view === 'posts' && <Posts />}
-        {view === 'create-post' && <CreatePost onPostCreateSubmit={handlePostCreateSubmit} />}
+            {view === 'posts' && <Posts />}
+
+            {view === 'create-post' && <CreatePost onPostCreated={handlePostCreated} onPostCreateCancelled={handlePostCreateCancelled} />}
         </main>
 
         <footer>
@@ -58,3 +64,5 @@ function Home({ onLogoutClick }) {
         </footer>
     </div>
 }
+
+export default Home

@@ -5,8 +5,8 @@ html {
     background-color: var(--bg-color);
     color: var(--color);
 
-    --bg-color: black;
-    --color: red;
+    --bg-color: rgb(255, 255, 255);
+    --color: black;
     --color-high: magenta;
     --color-low: firebrick;
     --padding-x: 1rem;
