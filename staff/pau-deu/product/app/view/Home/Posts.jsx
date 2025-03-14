@@ -59,5 +59,4 @@ export function Posts() {
     return <section>
         {posts.map(post => <Post key={post.id} post={post} onPostLikeToggled={handlePostLikeToggled} onPostDeleted={handlePostDeleted} onPostTextEdited={handlePostTextEdited} />)}
     </section>
-    
-}
+    }
