@@ -8,20 +8,23 @@ import { uuid } from './uuid.js'
      }
  
      getAll() {
-        const json = readFileSync(`data/${this.name}.json`)
+        const json = readFileSync(`data/${this.name}.json`, 'utf8')
+
          const collection = JSON.parse(json)
  
-         return collection
+         return collection 
      }
  
      setAll(collection) {
-         const json = JSON.stringify(collection)
+         const json = JSON.stringify(collection, null, 4)
  
-         localStorage[this.name] = json
+         writeFileSync(`data/${this.name}.json`, json) 
      }
  
      getById(id) {
-         const collection = JSON.parse(localStorage[this.name] || '[]')
+        const json = readFileSync(`data/${this.name}.json`)
+        
+        const collection = JSON.parse(json)
  
          const document = collection.find(document => document.id === id) || null
  
@@ -29,19 +32,23 @@ import { uuid } from './uuid.js'
      }
  
      insertOne(document) {
-         const collection = JSON.parse(localStorage[this.name] || '[]')
+        let json = readFileSync(`data/${this.name}.json`)
+        
+        const collection = JSON.parse(json)
  
          document.id = uuid()
  
          collection.push(document)
  
-         const json = JSON.stringify(collection)
+         json = JSON.stringify(collection, null, 4)
  
-         localStorage[this.name] = json
+         writeFileSync(`data/${this.name}.json`, json) 
      }
  
      findOne(condition) {
-         const collection = JSON.parse(localStorage[this.name] || '[]')
+        const json = readFileSync(`data/${this.name}.json`)
+        
+        const collection = JSON.parse(json)
  
          for (let i = 0; i < collection.length; i++) {
              const document = collection[i]
@@ -54,28 +61,32 @@ import { uuid } from './uuid.js'
          return null
      }
  
-     updateOne(document) {
-         const collection = JSON.parse(localStorage[this.name] || '[]')
+     updateOne(condition, document) {
+        let json = readFileSync(`data/${this.name}.json`)
+        
+        const collection = JSON.parse(json)
  
-         const index = collection.findIndex(doc => doc.id === document.id)
+         const index = collection.findIndex(condition)
  
          collection[index] = document
  
-         const json = JSON.stringify(collection)
+         json = JSON.stringify(collection)
  
-         localStorage[this.name] = json
+         writeFileSync(`data/${this.name}.json`, json) 
      }
  
      deleteOne(condition) {
-         const collection = JSON.parse(localStorage[this.name] || '[]')
+        let json = readFileSync(`data/${this.name}.json`)
+        
+        const collection = JSON.parse(json)
  
          const index = collection.findIndex(condition)
  
          if (index > -1)
              collection.splice(index, 1)
  
-         const json = JSON.stringify(collection)
+         json = JSON.stringify(collection)
  
-         localStorage[this.name] = json
+         writeFileSync(`data/${this.name}.json`, json) 
      }
  }
