@@ -1,12 +1,19 @@
 import { data } from '../data/index.js'
+import { NotFoundError } from '../errors.js'
  import { validate } from './validate.js'
+
+ import { NotFoundError } from '../errors.js'
  
  export const createPost = (userId, image, text) => {
      validate.url(image, 'image')
      validate.id (userId, 'userId')
-     validate.maxLength(1000)
+     validate.maxLength(image, 500, 'image')
      validate.text(text, 'text')
-     validate.maxLength(500)
+     validate.maxLength(text, 500, 'text')
+
+     const user = data.users.getById(userId)
+ 
+     if (!user) throw new NotFoundError('user not found')
  
      const post = {
          author: userId,
