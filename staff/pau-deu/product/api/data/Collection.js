@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from 'fs'
-
-import { uuid } from './uuid.js'
+ 
+ import { uuid } from './uuid.js'
  
  export class Collection {
      constructor(name) {
@@ -8,23 +8,23 @@ import { uuid } from './uuid.js'
      }
  
      getAll() {
-        const json = readFileSync(`data/${this.name}.json`, 'utf8')
-
+         const json = readFileSync(`data/${this.name}.json`, 'utf8')
+ 
          const collection = JSON.parse(json)
  
-         return collection 
+         return collection
      }
  
      setAll(collection) {
          const json = JSON.stringify(collection, null, 4)
  
-         writeFileSync(`data/${this.name}.json`, json) 
+         writeFileSync(`data/${this.name}.json`, json)
      }
  
      getById(id) {
-        const json = readFileSync(`data/${this.name}.json`)
-        
-        const collection = JSON.parse(json)
+         const json = readFileSync(`data/${this.name}.json`, 'utf8')
+ 
+         const collection = JSON.parse(json)
  
          const document = collection.find(document => document.id === id) || null
  
@@ -32,9 +32,9 @@ import { uuid } from './uuid.js'
      }
  
      insertOne(document) {
-        let json = readFileSync(`data/${this.name}.json`)
-        
-        const collection = JSON.parse(json)
+         let json = readFileSync(`data/${this.name}.json`, 'utf8')
+ 
+         const collection = JSON.parse(json)
  
          document.id = uuid()
  
@@ -42,13 +42,13 @@ import { uuid } from './uuid.js'
  
          json = JSON.stringify(collection, null, 4)
  
-         writeFileSync(`data/${this.name}.json`, json) 
+         writeFileSync(`data/${this.name}.json`, json)
      }
  
      findOne(condition) {
-        const json = readFileSync(`data/${this.name}.json`)
-        
-        const collection = JSON.parse(json)
+         const json = readFileSync(`data/${this.name}.json`, 'utf8')
+ 
+         const collection = JSON.parse(json)
  
          for (let i = 0; i < collection.length; i++) {
              const document = collection[i]
@@ -62,31 +62,31 @@ import { uuid } from './uuid.js'
      }
  
      updateOne(condition, document) {
-        let json = readFileSync(`data/${this.name}.json`)
-        
-        const collection = JSON.parse(json)
+         let json = readFileSync(`data/${this.name}.json`, 'utf8')
+ 
+         const collection = JSON.parse(json)
  
          const index = collection.findIndex(condition)
  
          collection[index] = document
  
-         json = JSON.stringify(collection)
+         json = JSON.stringify(collection, null, 4)
  
-         writeFileSync(`data/${this.name}.json`, json) 
+         writeFileSync(`data/${this.name}.json`, json)
      }
  
      deleteOne(condition) {
-        let json = readFileSync(`data/${this.name}.json`)
-        
-        const collection = JSON.parse(json)
+         let json = readFileSync(`data/${this.name}.json`, 'utf8')
+ 
+         const collection = JSON.parse(json)
  
          const index = collection.findIndex(condition)
  
          if (index > -1)
              collection.splice(index, 1)
  
-         json = JSON.stringify(collection)
+         json = JSON.stringify(collection, null, 4)
  
-         writeFileSync(`data/${this.name}.json`, json) 
+         writeFileSync(`data/${this.name}.json`, json)
      }
  }

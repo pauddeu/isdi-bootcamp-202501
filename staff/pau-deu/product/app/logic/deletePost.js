@@ -1,18 +1,32 @@
 import { data } from '../data/index.js'
  import { validate } from './validate.js'
  
- import { NotFoundError, OwnershipError } from '../errors.js'
+ import errors, { SystemError } from '../errors.js'
  
  export const deletePost = postId => {
      validate.id(postId, 'postId')
  
      const { userId } = data
  
-     const foundPost = data.posts.findOne(post => post.id === postId)
+     return fetch(`http://localhost:8080/posts/${postId}`, {
+         method: 'DELETE',
+         headers: {
+             Authorization: `Basic ${userId}`
+         }
+     })
+         .catch(error => { throw new SystemError(error.message) })
+         .then(response => {
+             if (response.status === 204)
+                 return
  
-     if (!foundPost) throw new NotFoundError('post not found')
+             return response.json()
+                 .catch(error => { throw new SystemError(error.message) })
+                 .then(body => {
+                     const { error, message } = body
  
-     if (foundPost.author !== userId) throw new OwnershipError('user is not author of post')
+                     const constructor = errors[error]
  
-     data.posts.deleteOne(post => post.id === postId)
+                     throw new constructor(message)
+                 })
+         })
  }

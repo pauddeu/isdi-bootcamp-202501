@@ -9,4 +9,4 @@ export function Landing({ onNavigateToRegister, onNavigateToLogin }) {
         <h1>Logo</h1>
         <a onClick={handleRegisterClick}>Register</a> or <a onClick={handleLoginClick}>Login</a>
     </div>
-    }
+}

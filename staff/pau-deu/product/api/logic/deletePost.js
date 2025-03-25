@@ -4,16 +4,18 @@ import { data } from '../data/index.js'
  import { NotFoundError, OwnershipError } from '../errors.js'
  
  export const deletePost = (userId, postId) => {
-    validate.id(userId, 'userId')
+     validate.id(userId, 'userId')
      validate.id(postId, 'postId')
  
-     const { userId } = data
+     const user = data.users.getById(userId)
  
-     const foundPost = data.posts.findOne(post => post.id === postId)
+     if (!user) throw new NotFoundError('user not found')
  
-     if (!foundPost) throw new NotFoundError('post not found')
+     const post = data.posts.findOne(post => post.id === postId)
  
-     if (foundPost.author !== userId) throw new OwnershipError('user is not author of post')
+     if (!post) throw new NotFoundError('post not found')
+ 
+     if (post.author !== userId) throw new OwnershipError('user is not author of post')
  
      data.posts.deleteOne(post => post.id === postId)
  }

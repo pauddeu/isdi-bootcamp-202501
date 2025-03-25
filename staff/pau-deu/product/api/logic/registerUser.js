@@ -26,4 +26,4 @@ import { data } from '../data/index.js'
      }
  
      data.users.insertOne(user)
- }  
+ }
