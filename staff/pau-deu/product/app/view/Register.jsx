@@ -1,6 +1,7 @@
 import { logic } from '../logic/index.js'
+ import { errors } from 'com'
  
- import { SystemError, ValidationError } from '../errors.js'
+ const { SystemError, ValidationError } = errors
  
  export function Register({ onNavigateToLogin, onUserRegistered }) {
      const handleRegisterSubmit = event => {

@@ -1,7 +1,7 @@
-import { data } from '../data/index.js'
- import { validate } from './validate.js'
+import { User, Post } from '../data/index.js'
+ import { errors, validate } from 'com'
  
- import { NotFoundError } from '../errors.js'
+ const { SystemError, NotFoundError } = errors
  
  export const createPost = (userId, image, text) => {
      validate.id(userId, 'userId')
@@ -10,18 +10,20 @@ import { data } from '../data/index.js'
      validate.text(text, 'text')
      validate.maxLength(text, 500, 'text')
  
-     const user = data.users.getById(userId)
+     return User.findById(userId).lean()
+         .catch(error => { throw new SystemError(error.message) })
+         .then(user => {
+             if (!user) throw new NotFoundError('user not found')
  
-     if (!user) throw new NotFoundError('user not found')
+             const post = {
+                 author: userId,
+                 image,
+                 text
+             }
  
-     const post = {
-         author: userId,
-         image: image,
-         text: text,
-         createdAt: new Date(),
-         modifiedAt: null,
-         likes: []
-     }
+             return Post.create(post)
+                 .catch(error => { throw new SystemError(error.message) })
+         })
+         .then(() => { })
  
-     data.posts.insertOne(post)
  }

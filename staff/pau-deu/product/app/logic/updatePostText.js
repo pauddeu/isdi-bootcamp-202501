@@ -1,17 +1,17 @@
 import { data } from '../data/index.js'
- import { validate } from './validate.js'
+ import { errors, validate } from 'com'
  
- import errors, { SystemError } from '../errors.js'
+ const { SystemError } = errors
  
  export const updatePostText = (postId, text) => {
      validate.id(postId, 'postId')
  
-     const { userId } = data
+     const { token } = data
  
      return fetch(`http://localhost:8080/posts/${postId}/text`, {
          method: 'PATCH',
          headers: {
-             Authorization: `Basic ${userId}`,
+             AAuthorization: `Bearer ${token}`,
              'Content-Type': 'application/json'
          },
          body: JSON.stringify({ text })

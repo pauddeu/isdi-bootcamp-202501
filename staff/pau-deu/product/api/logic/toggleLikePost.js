@@ -1,26 +1,32 @@
-import { data } from '../data/index.js'
- import { validate } from './validate.js'
+import { User, Post } from '../data/index.js'
+ import { errors, validate } from 'com'
  
- import { NotFoundError } from '../errors.js'
+ const { SystemError, NotFoundError } = errors
  
  export const toggleLikePost = (userId, postId) => {
      validate.id(userId, 'userId')
      validate.id(postId, 'postId')
  
-     const user = data.users.getById(userId)
+     return Promise.all([
+         User.findById(userId).lean(),
+         Post.findById(postId).lean()
+     ])
+         .catch(error => { throw new SystemError(error.message) })
+         .then(([user, post]) => {
+             if (!user) throw new NotFoundError('user not found')
+             if (!post) throw new NotFoundError('post not found')
  
-     if (!user) throw new NotFoundError('user not found')
+             const { likes } = post
  
-     const post = data.posts.findOne(post => post.id === postId)
+             const index = likes.findIndex(userObjectId => userObjectId.toString() === userId)
  
-     if (!post) throw new NotFoundError('post not found')
+             if (index < 0)
+                 likes.push(userId)
+             else
+                 likes.splice(index, 1)
  
-     const index = post.likes.findIndex(likeUserId => likeUserId === userId)
- 
-     if (index < 0)
-         post.likes.push(userId)
-     else
-         post.likes.splice(index, 1)
- 
-     data.posts.updateOne(post => post.id === postId, post)
+             return Post.updateOne({ _id: postId }, { $set: { likes } })
+                 .catch(error => { throw new SystemError(error.message) })
+                 .then(() => { })
+         })
  }

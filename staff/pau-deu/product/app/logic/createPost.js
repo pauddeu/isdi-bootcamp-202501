@@ -1,7 +1,7 @@
 import { data } from '../data/index.js'
- import { validate } from './validate.js'
+ import { errors, validate } from 'com'
  
- import errors, { SystemError } from '../errors.js'
+ const { SystemError } = errors
  
  export const createPost = (image, text) => {
      validate.url(image, 'image')
@@ -9,12 +9,12 @@ import { data } from '../data/index.js'
      validate.text(text, 'text')
      validate.maxLength(text, 500, 'text')
  
-     const { userId } = data
+     const { token } = data
  
      return fetch('http://localhost:8080/posts', {
          method: 'POST',
          headers: {
-             Authorization: `Basic ${userId}`,
+            Authorization: `Bearer ${token}`,
              'Content-Type': 'application/json'
          },
          body: JSON.stringify({ image, text })

@@ -1,14 +1,15 @@
 import { data } from '../data/index.js'
+ import { errors, validate } from 'com'
  
- import errors, { SystemError } from '../errors.js'
+ const { SystemError } = errors
  
  export const getPosts = () => {
-     const { userId } = data
+     const { token } = data
  
      return fetch('http://localhost:8080/posts', {
          method: 'GET',
          headers: {
-             Authorization: `Basic ${userId}`
+             Authorization: `Bearer ${token}`
          }
      })
          .catch(error => { throw new SystemError(error.message) })

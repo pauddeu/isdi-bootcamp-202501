@@ -1,14 +1,16 @@
-import { data } from '../data/index.js'
- import { validate } from './validate.js'
+import { User } from '../data/index.js'
+ import { errors, validate } from 'com'
  
- import { NotFoundError } from '../errors.js'
+ const { SystemError, NotFoundError } = errors
  
  export const getUserName = userId => {
      validate.id(userId, 'userId')
  
-     const user = data.users.getById(userId)
+     return User.findById(userId).lean()
+         .catch(error => { throw new SystemError(error.message) })
+         .then(user => {
+             if (!user) throw new NotFoundError('user not found')
  
-     if (!user) throw new NotFoundError('user not found')
- 
-     return user.name
+             return user.name
+         })
  }

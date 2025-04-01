@@ -1,6 +1,6 @@
-import { validate } from './validate.js'
+import { errors, validate } from 'com'
  
- import errors, { SystemError } from '../errors.js'
+ const { SystemError } = errors
  
  export const registerUser = (name, email, username, password) => {
      validate.text(name, 'name')

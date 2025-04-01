@@ -1,7 +1,7 @@
 import { data } from '../data'
- import { validate } from './validate'
+ import { errors, validate } from 'com'
  
- import errors, { SystemError } from '../errors.js'
+ const { SystemError } = errors
  
  export const loginUser = (username, password) => {
      validate.username(username, 'username')
@@ -20,9 +20,9 @@ import { data } from '../data'
                  return response.json()
                      .catch(error => { throw new SystemError(error.message) })
                      .then(body => {
-                         const { id } = body
+                         const { token } = body
  
-                         data.userId = id
+                         data.token = token
                      })
  
              return response.json()

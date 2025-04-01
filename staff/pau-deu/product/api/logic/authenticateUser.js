@@ -1,17 +1,24 @@
-import { data } from '../data/index.js'
- import { validate } from './validate.js'
+import { User } from '../data/index.js'
+ import { errors, validate } from 'com'
+ import bcrypt from 'bcryptjs'
  
- import { CredentialsError, NotFoundError } from '../errors.js'
+ const { SystemError, NotFoundError, CredentialsError } = errors
  
  export const authenticateUser = (username, password) => {
-     validate.username(username, 'username')
-     validate.password(password, 'password')
+     validate.username(username)
+     validate.password(password)
  
-     const found = data.users.findOne(user => user.username === username)
+     return User.findOne({ username }).lean()
+         .catch(error => { throw new SystemError(error.message) })
+         .then(user => {
+             if (!user) throw new NotFoundError('user not found')
  
-     if (!found) throw new NotFoundError('user not found')
+             return bcrypt.compare(password, user.password)
+                 .catch(error => { throw new SystemError(error.message) })
+                 .then(match => {
+                     if (!match) throw new CredentialsError('wrong credentials')
  
-     if (found.password !== password) throw new CredentialsError('wrong credentials')
- 
-     return found.id
+                     return user._id.toString()
+                 })
+         })
  }

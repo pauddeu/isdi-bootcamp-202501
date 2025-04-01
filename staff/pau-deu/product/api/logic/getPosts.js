@@ -1,47 +1,36 @@
-import { data } from '../data/index.js'
- import { validate } from './validate.js'
+import { SystemError } from 'com/errors.js'
+ import { User, Post } from '../data/index.js'
+ import { errors, validate } from 'com'
  
- import { NotFoundError } from '../errors.js'
+ const { NotFoundError } = errors
  
  export const getPosts = userId => {
      validate.id(userId, 'userId')
  
-     const user = data.users.getById(userId)
+     return Promise.all([
+         User.findById(userId).lean(),
+         Post.find().select('-__v').sort('-createdAt').populate('author', 'username').lean()
+     ])
+         .catch(error => { throw new SystemError(error.message) })
+         .then(([user, posts]) => {
+             if (!user) throw new NotFoundError('user not found')
  
-     if (!user) throw new NotFoundError('user not found')
+             posts.forEach(post => {
+                 post.id = post._id.toString()
+                 delete post._id
  
-     const posts = data.posts.getAll()
+                 if (post.author._id) {
+                     post.author.id = post.author._id.toString()
+                     delete post.author._id
+                 }
  
-     const aggregatedPosts = []
+                 post.liked = post.likes.some(userObjectId => userObjectId.toString() === userId)
+                 post.likesCount = post.likes.length
+                 delete post.likes
  
-     for (let i = 0; i < posts.length; i++) {
-         const post = posts[i]
+                 post.own = post.author.id === userId
+             })
  
-         let liked = false
- 
-         for (let i = 0; i < post.likes.length && !liked; i++) {
-             const id = post.likes[i]
- 
-             if (id === userId)
-                 liked = true
-         }
- 
-         const user = data.users.getById(post.author)
- 
-         const aggregatedPost = {
-             id: post.id,
-             author: { id: post.author, username: user.username },
-             image: post.image,
-             text: post.text,
-             createdAt: new Date(post.createdAt),
-             modifiedAt: post.modifiedAt && new Date(post.modifiedAt),
-             liked: liked,
-             likesCount: post.likes.length,
-             own: post.author === userId
-         }
- 
-         aggregatedPosts[aggregatedPosts.length] = aggregatedPost
-     }
- 
-     return aggregatedPosts.reverse()
+             return posts
+         })
  }

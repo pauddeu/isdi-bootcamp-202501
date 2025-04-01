@@ -1,29 +1,33 @@
-import { data } from '../data/index.js'
- import { validate } from './validate.js'
+import { User } from '../data/index.js'
+ import { errors, validate } from 'com'
+ import bcrypt from 'bcryptjs'
  
- 
- import { DuplicityError } from '../errors.js'
+ const { SystemError, DuplicityError } = errors
  
  export const registerUser = (name, email, username, password) => {
-     validate.text(name, 'name')
+     validate.name(name)
      validate.minLength(name, 1, 'name')
      validate.maxLength(name, 20, 'name')
-     validate.email(email, 'email')
-     validate.username(username, 'username')
-     validate.password(password, 'password')
+     validate.email(email)
+     validate.username(username)
+     validate.password(password)
  
-     const found = data.users.findOne(user => user.email === email || user.username === username)
+     return bcrypt.hash(password, 10)
+         .catch(error => { throw new SystemError(error.message) })
+         .then(hash => {
+             const user = {
+                 name: name,
+                 email: email,
+                 username: username,
+                 password: hash
+             }
  
-     if (found) throw new DuplicityError('user already exists')
+             return User.create(user)
+                 .catch(error => {
+                     if (error.code === 11000) throw new DuplicityError('user already exists')
  
-     const user = {
-         name: name,
-         email: email,
-         username: username,
-         password: password,
-         createdAt: new Date(),
-         modifiedAt: null
-     }
- 
-     data.users.insertOne(user)
+                     throw new SystemError(error.message)
+                 })
+         })
+         .then(() => { })
  }
